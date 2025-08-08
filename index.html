@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Static Review</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bibliotecas externas -->
+    <!-- Tailwind CSS (via CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="p-4 md:p-8 flex items-center justify-center min-h-screen">
+    <div
+      id="app-container"
+      class="bg-[#181818] p-6 md:p-8 rounded-lg shadow-2xl w-full max-w-4xl"
+    >
+      <!-- PÁGINA DE LOGIN -->
+      <div id="login-page" class="page active">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-center mb-6 text-[#1DB954]"
+        >
+          Static Review
+        </h2>
+        <div class="mb-4">
+          <label
+            for="login-email"
+            class="block text-sm font-medium text-[#b3b3b3] mb-1"
+            >E-mail</label
+          >
+          <input
+            type="email"
+            id="login-email"
+            placeholder="Digite seu e-mail"
+            class="input-style w-full p-2.5 rounded-lg border focus:outline-none focus:border-[#1DB954]"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            for="login-password"
+            class="block text-sm font-medium text-[#b3b3b3] mb-1"
+            >Senha</label
+          >
+          <input
+            type="password"
+            id="login-password"
+            placeholder="Digite sua senha"
+            class="input-style w-full p-2.5 rounded-lg border focus:outline-none focus:border-[#1DB954]"
+          />
+        </div>
+        <p
+          id="login-message"
+          class="text-center text-sm mt-4 text-red-500 hidden"
+        ></p>
+        <div class="flex flex-col md:flex-row gap-4 mt-6">
+          <button
+            id="login-btn"
+            class="btn-primary flex-1 py-3 font-semibold rounded-full"
+          >
+            Entrar
+          </button>
+          <button
+            id="show-register-modal-btn"
+            class="btn-secondary flex-1 py-3 font-semibold rounded-full"
+          >
+            Cadastre-se
+          </button>
+        </div>
+      </div>
+
+      <!-- PÁGINA DO CLIENTE -->
+      <div id="client-page" class="page">
+        <header
+          class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4"
+        >
+          <h1 class="text-3xl md:text-4xl font-bold text-[#1DB954]">
+            Static Review
+          </h1>
+          <div
+            class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto"
+          >
+            <p
+              id="client-welcome-message"
+              class="text-lg font-medium w-full md:w-auto text-center md:text-right"
+            ></p>
+            <button
+              id="client-logout-btn"
+              class="bg-transparent border border-[#1DB954] text-[#1DB954] font-medium py-2 px-4 rounded-full transition-colors duration-200 hover:bg-[#1DB954] hover:text-white w-full md:w-auto"
+            >
+              Sair
+            </button>
+          </div>
+        </header>
+
+        <nav class="flex gap-2 mb-6">
+          <div class="nav-link active" data-page="client-music-list">
+            Músicas
+          </div>
+          <div class="nav-link" data-page="client-rated-musics">
+            Minhas Avaliações
+          </div>
+        </nav>
+
+        <!-- Lista de Músicas para Cliente -->
+        <div id="client-music-list" class="page-section active">
+          <ul id="client-music-list-container" class="space-y-4"></ul>
+        </div>
+
+        <!-- Lista de Músicas Avaliadas pelo Cliente -->
+        <div id="client-rated-musics" class="page-section">
+          <ul id="client-rated-musics-container" class="space-y-4"></ul>
+        </div>
+      </div>
+
+      <!-- PÁGINA DO ARTISTA -->
+      <div id="artist-page" class="page">
+        <header
+          class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4"
+        >
+          <h1 class="text-3xl md:text-4xl font-bold text-[#1DB954]">
+            Minha Música
+          </h1>
+          <div
+            class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto"
+          >
+            <p
+              id="artist-welcome-message"
+              class="text-lg font-medium w-full md:w-auto text-center md:text-right"
+            ></p>
+            <button
+              id="artist-logout-btn"
+              class="bg-transparent border border-[#1DB954] text-[#1DB954] font-medium py-2 px-4 rounded-full transition-colors duration-200 hover:bg-[#1DB954] hover:text-white w-full md:w-auto"
+            >
+              Sair
+            </button>
+          </div>
+        </header>
+
+        <nav class="flex gap-2 mb-6">
+          <div class="nav-link active" data-page="artist-music-list">
+            Minhas Músicas
+          </div>
+          <div class="nav-link" data-page="artist-add-music">
+            Adicionar Música
+          </div>
+        </nav>
+
+        <!-- Lista de Músicas do Artista -->
+        <div id="artist-music-list" class="page-section active">
+          <ul id="artist-music-list-container" class="space-y-4"></ul>
+        </div>
+
+        <!-- Formulário para Adicionar Música -->
+        <div id="artist-add-music" class="page-section">
+          <form
+            id="music-form"
+            class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 md:p-6 bg-[#1e1e1e] rounded-xl shadow-inner mb-6"
+          >
+            <h3 class="text-xl font-bold md:col-span-2 mb-2 text-[#b3b3b3]">
+              Adicionar Música
+            </h3>
+            <div class="md:col-span-2">
+              <input
+                type="text"
+                id="music-title"
+                placeholder="Título da Música"
+                required
+                class="input-style w-full p-2.5 rounded-lg"
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                id="music-album"
+                placeholder="Álbum"
+                required
+                class="input-style w-full p-2.5 rounded-lg"
+              />
+            </div>
+            <div>
+              <input
+                type="number"
+                id="music-year"
+                placeholder="Ano"
+                required
+                class="input-style w-full p-2.5 rounded-lg"
+              />
+            </div>
+            <div class="md:col-span-2">
+              <label
+                for="music-genre"
+                class="block text-sm font-medium text-[#b3b3b3] mb-1"
+                >Gênero(s)</label
+              >
+              <select
+                id="music-genre"
+                multiple
+                required
+                class="input-style w-full p-2.5 rounded-lg multi-select focus:outline-none focus:border-[#1DB954]"
+              ></select>
+            </div>
+            <div class="md:col-span-2">
+              <input
+                type="text"
+                id="music-description"
+                placeholder="Descrição"
+                required
+                class="input-style w-full p-2.5 rounded-lg"
+              />
+            </div>
+            <div
+              class="md:col-span-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
+            >
+              <input
+                type="text"
+                id="music-translation"
+                placeholder="Tradução (opcional)"
+                class="input-style w-full p-2.5 rounded-lg"
+              />
+              <button
+                type="button"
+                id="generate-translation-btn"
+                class="bg-[#1DB954] text-white p-2.5 rounded-lg whitespace-nowrap text-sm"
+              >
+                Gerar Tradução
+              </button>
+            </div>
+            <div class="md:col-span-2">
+              <input
+                type="text"
+                id="music-photo-url"
+                placeholder="URL da Capa do Álbum (opcional)"
+                class="input-style w-full p-2.5 rounded-lg"
+              />
+            </div>
+            <div class="md:col-span-2">
+              <button
+                type="submit"
+                class="btn-primary w-full py-3 font-semibold rounded-full"
+              >
+                Adicionar Música
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- MODAIS (serão carregados pelo modals.js) -->
+      <div id="rating-modal" class="modal"></div>
+      <div id="edit-modal" class="modal"></div>
+      <div id="register-modal" class="modal"></div>
+      <div id="confirm-modal" class="modal"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/client.js"></script>
+    <script src="js/artist.js"></script>
+    <script src="js/modals.js"></script>
+  </body>
+</html>
